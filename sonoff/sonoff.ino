@@ -2066,6 +2066,26 @@ void SwitchHandler()
       }
 
       button = digitalRead(pin[GPIO_SWT1 +i]);
+
+      //---------------------------------------------------------------------------------------------------------------- 
+      JR: 180217: ignore switch changes less then 50ms to avoid flickering due to RF disturbance
+      //---------------------------------------------------------------------------------------------------------------- 
+      static unsigned long lastSwitchTime=millis();
+      if (button != lastwallswitch[i]) { 
+         unsigned long timeDiff = millis()-lastSwitchTime;
+         if (timeDiff <= 50UL) {
+            button = lastwallswitch[i];
+            snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_DEBUG "MySwitch interference time: %d"), timeDiff);     
+            AddLog(LOG_LEVEL_DEBUG); 
+         }
+         else {
+            lastSwitchTime=millis();
+            snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_DEBUG "MySwitch press time: %d"), timeDiff);     
+            AddLog(LOG_LEVEL_DEBUG);
+         }
+      }
+      //---------------------------------------------------------------------------------------------------------------- 
+
       if (button != lastwallswitch[i]) {
         switchflag = 3;
         switch (Settings.switchmode[i]) {
