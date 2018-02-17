@@ -2099,6 +2099,10 @@ void SwitchHandler()
       static unsigned long lastSwitchTime=millis();
       if (button != lastwallswitch[i]) { 
          unsigned long timeDiff = millis()-lastSwitchTime;
+         char stopic[TOPSZ];
+         GetTopic_P(stopic, 2, Settings.mqtt_topic, "switchtime");
+         snprintf(mqtt_data, sizeof(mqtt_data), "%d", timeDiff);
+         MqttPublish(stopic);
          if (timeDiff <= 50UL) {
             button = lastwallswitch[i];
             snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_DEBUG "MySwitch interference time: %d"), timeDiff);     
