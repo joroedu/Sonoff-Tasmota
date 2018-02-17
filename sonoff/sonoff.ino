@@ -1941,6 +1941,32 @@ void ButtonHandler()
       }
     }
 
+    //---------------------------------------------------------------------------------------------------------------- 
+    //JR 171014: add additional reads (each 10ms up to 900ms) to measure button time to avoid flickering due to RF disturbance
+    //----------------------------------------------------------------------------------------------------------------  
+    if (button == PRESSED) {
+      int button_timer = 0;
+      while (button == PRESSED && button_timer < 900) {
+        delay(10);    // 10ms delay
+        button_timer += 10;
+        button = digitalRead(pin[GPIO_KEY1 +button_index]);
+      }
+      char stopic[TOPSZ];
+      GetTopic_P(stopic, 2, Settings.mqtt_topic, "buttontime");
+      snprintf(mqtt_data, sizeof(mqtt_data), "%d", button_timer);
+      MqttPublish(stopic);
+      if (button_timer > 50) {   //no flickering if switch pressed longer 50ms
+        button = PRESSED;
+        snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_DEBUG "MyButton press time: %d"), button_timer);     
+        AddLog(LOG_LEVEL_DEBUG); 
+      } else {
+        button = NOT_PRESSED;
+        snprintf_P(log_data, sizeof(log_data), PSTR(D_LOG_DEBUG "MyButton interference time: %d"), button_timer);     
+        AddLog(LOG_LEVEL_DEBUG); 
+      }
+    }
+    //---------------------------------------------------------------------------------------------------------------- 
+
     if (button_present) {
       if (SONOFF_4CHPRO == Settings.module) {
         if (holdbutton[button_index]) {
@@ -2068,7 +2094,7 @@ void SwitchHandler()
       button = digitalRead(pin[GPIO_SWT1 +i]);
 
       //---------------------------------------------------------------------------------------------------------------- 
-      JR: 180217: ignore switch changes less then 50ms to avoid flickering due to RF disturbance
+      //JR: 180217: ignore switch changes less then 50ms to avoid flickering due to RF disturbance
       //---------------------------------------------------------------------------------------------------------------- 
       static unsigned long lastSwitchTime=millis();
       if (button != lastwallswitch[i]) { 
