@@ -2096,7 +2096,7 @@ void SwitchHandler()
       //---------------------------------------------------------------------------------------------------------------- 
       //JR: 180217: ignore switch changes less then 50ms to avoid flickering due to RF disturbance
       //---------------------------------------------------------------------------------------------------------------- 
-      static unsigned long lastSwitchTime=millis();
+      static unsigned long lastSwitchTime=0;
       if (button != lastwallswitch[i]) { 
          unsigned long timeDiff = millis()-lastSwitchTime;
          char stopic[TOPSZ];
