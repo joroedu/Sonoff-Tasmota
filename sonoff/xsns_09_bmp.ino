@@ -407,7 +407,7 @@ void BmpShow(boolean json)
     float p = 0.0;
     float h = 0.0;
     float g = 0.0;
-    float bmp_sealevel = 0.0;
+    float bmp_sealevel = 166.0;
 
     switch (bmp_type) {
       case BMP180_CHIPID:

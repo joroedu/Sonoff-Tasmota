@@ -81,7 +81,7 @@
   #define MQTT_USER            "cloudmqttuser"      // [MqttUser] Mandatory user
   #define MQTT_PASS            "cloudmqttpassword"  // [MqttPassword] Mandatory password
 #else
-  #define MQTT_HOST            "raspi3.local"          // [MqttHost]
+  #define MQTT_HOST            "10.0.0.14"          // [MqttHost]
   #define MQTT_PORT            1883              // [MqttPort] MQTT port (10123 on CloudMQTT)
   #define MQTT_USER            "DVES_USER"       // [MqttUser] Optional user
   #define MQTT_PASS            "DVES_PASS"       // [MqttPassword] Optional password
@@ -97,7 +97,7 @@
 #define MQTT_CMND_HOLD         "HOLD"            // [StateText4] Command to send when button is kept down for over KEY_HOLD_TIME * 0.1 seconds (needs to be a string like "HOLD")
 
 // -- MQTT topics ---------------------------------
-#define MQTT_FULLTOPIC         "tasmota/%topic%/%prefix%/" // Up to max 80 characers
+#define MQTT_FULLTOPIC         "/philipp/tasmota/%topic%/%prefix%/" // Up to max 80 characers
 //#define MQTT_FULLTOPIC         "%prefix%/%topic%/" // [FullTopic] Subscribe and Publish full topic name - Legacy topic
 
 // %prefix% token options
@@ -178,7 +178,7 @@
 //#define USE_DS18x20_LEGACY                       // Optional for more than one DS18x20 sensors with dynamic scan using library OneWire (+1k5 code)
 
 // -- I2C sensors ---------------------------------
-//#define USE_I2C                                  // I2C using library wire (+10k code, 0k2 mem, 124 iram)
+#define USE_I2C                                  // I2C using library wire (+10k code, 0k2 mem, 124 iram)
 #ifdef USE_I2C
   #define USE_SHT                                // Add I2C emulating code for SHT1X sensor (+1k4 code)
   #define USE_SHT3X                              // Add I2C code for SHT3x sensor (+0k6 code)
